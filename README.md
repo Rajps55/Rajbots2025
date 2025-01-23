@@ -1,29 +1,4 @@
-<p align="center"> <img src="https://graph.org/file/ef043e0bfe76db3af15f9.jpg"> </p>
-<h1 align="center"> 𝑫𝒆𝒆𝒏𝒅𝒂𝒚𝒂𝒍_𝒅𝒉𝒂𝒌𝒂𝒅 </h1>
 
-**OWNER**
-
-* [![Contact Developer](https://img.shields.io/static/v1?label=Contact+Developer&message=On+Telegram&color=critical)](https://t.me/Deendayal_Support_Group)
-
-First Check our **Demo** bot -
-
-[![Click Here](https://img.shields.io/badge/Demo%20Bot-Click%20Here-blue?style=flat&logo=telegram&labelColor=white&link=https://t.me/Princess_V4_bot)](https://t.me/Princess_V4_bot)
-
-## Special Thanks To
-
-### 🌴 [Sᴀʜɪᴅ ᴍᴀʟɪᴋ](https://github.com/Sahidmalik001)
-
-### 🌴 [Mʀ Rᴀᴀᴢᴢ](https://github.com/MrRaazz)
-
-### 🌴 [Hᴀʀsʜᴀʟ Pᴜʀᴏʜɪᴛ Eᴅɪᴛs](https://github.com/HarshalPurohitEdits)
-
-### 🌴 [Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ](https://t.me/Deendayal_Support_Group)
-
-### Need Deployment Support?
-
-If you encounter any issues **Deploying** the bot, feel free to seek assistance in our **support group**:
-
-[![Join Support Group    ](https://img.shields.io/badge/Join%20Support%20Group-Click%20Here-blue?style=flat&logo=telegram&labelColor=white&link=https://t.me/Deendayal_Support_Group)](https://t.me/Deendayal_Support_Group)
 
   **features**
 - [x] 𝒔𝒕𝒓𝒆𝒂𝒎 𝒎𝒐𝒅𝒆 𝒐𝒏 𝒐𝒇𝒇 
