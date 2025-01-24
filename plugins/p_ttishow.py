@@ -13,7 +13,7 @@ import time
 from time import time
 from bot import botStartTime
 
-"""-----------------------------------------https://t.me/Deendayal_dhakad--------------------------------------"""
+"""-----------------------------------------https://t.me/n_flixmovie--------------------------------------"""
 
 @Client.on_message(filters.new_chat_members & filters.group)
 async def save_group(bot, message):
@@ -263,7 +263,7 @@ async def unban_a_user(bot, message):
     
 @Client.on_message(filters.command('users') & filters.user(ADMINS))
 async def list_users(bot, message):
-    # https://t.me/GetTGLink/4184
+    # https://t.me/n_flixmovie
     raju = await message.reply('Getting List Of Users')
     users = await db.get_all_users()
     out = "Users Saved In DB Are:\n\n"
