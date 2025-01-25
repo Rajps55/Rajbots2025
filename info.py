@@ -62,15 +62,15 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Deendayal_files')
 # ============================
 # Movie Notification & Update Settings
 # ============================
-DEENDAYAL_MOVIE_UPDATE_NOTIFICATION = bool(environ.get('DEENDAYAL_MOVIE_UPDATE_NOTIFICATION', False))  # Notification On (True) / Off (False)
-DEENDAYAL_IMAGE_FETCH = bool(environ.get('DEENDAYAL_IMAGE_FETCH', False))  # On (True) / Off (False)
+DEENDAYAL_MOVIE_UPDATE_NOTIFICATION = bool(environ.get('DEENDAYAL_MOVIE_UPDATE_NOTIFICATION', True))  # Notification On (True) / Off (False)
+DEENDAYAL_IMAGE_FETCH = bool(environ.get('DEENDAYAL_IMAGE_FETCH', True))  # On (True) / Off (False)
 CAPTION_LANGUAGES = ["Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla", "Telugu", "Malayalam", "Kannada", "Marathi", "Punjabi", "Bengoli", "Gujrati", "Korean", "Gujarati", "Spanish", "French", "German", "Chinese", "Arabic", "Portuguese", "Russian", "Japanese", "Odia", "Assamese", "Urdu"]
 
 # ============================
 # Verification Settings
 # ============================
 VERIFY = bool(environ.get('VERIFY', True))  # Verification On (True) / Off (False)
-DEENDAYAL_VERIFY_EXPIRE = int(environ.get('DEENDAYAL_VERIFY_EXPIRE', 24))  # Add time in hours
+DEENDAYAL_VERIFY_EXPIRE = int(environ.get('DEENDAYAL_VERIFY_EXPIRE', 12))  # Add time in hours
 DEENDAYAL_VERIFIED_LOG = int(environ.get('DEENDAYAL_VERIFIED_LOG', '-1002213457968'))  # Log channel id (make sure bot is admin)
 HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/APSmo/7')  # How to open tutorial link for verification
 
@@ -81,14 +81,14 @@ IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', False))
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'shortxlinks.com')
 SHORTLINK_API = environ.get('SHORTLINK_API', 'fa2a0768fc8d2a51b22e46293634a52670a73c7a')
 TUTORIAL = environ.get('TUTORIAL', 'https://t.me/APSmo/7')  # Tutorial video link for opening shortlink website
-IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', False))
+IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
 
 # ============================
 # Channel & Group Links Configuration
 # ============================
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/n_flixmovie')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/netfilix_movie')
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/@CoderRzps')
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/CoderRzps')
 DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK = environ.get('DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK', 'https://t.me/+Ie4mNf6lL5RjYjM1')
 OWNERID = int(os.environ.get('OWNERID', '6174868004'))  # Replace with the actual admin ID
 
@@ -144,7 +144,7 @@ SEASONS = ["season 1" , "season 2" , "season 3" , "season 4", "season 5" , "seas
 # ============================
 
 STREAM_MODE = bool(environ.get('STREAM_MODE', True)) # Set True or False
-NO_PORT = bool(environ.get('NO_PORT', False))
+NO_PORT = bool(environ.get('NO_PORT', True))
 APP_NAME = None
 if 'DYNO' in environ:
     ON_HEROKU = True
