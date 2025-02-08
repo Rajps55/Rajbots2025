@@ -1,123 +1,109 @@
+
 import sys
 import glob
 import importlib
-import asyncio
+from pathlib import Path
+from pyrogram import idle
 import logging
 import logging.config
-import time
-from pathlib import Path
-from pyrogram import Client, idle, __version__
+import time  
+
+# Get logging configurations
+logging.config.fileConfig('logging.conf')
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("imdbpy").setLevel(logging.ERROR)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logging.getLogger("aiohttp").setLevel(logging.ERROR)
+logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
+
+from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media, Media2, tempDict, choose_mediaDB, db as clientDB
 from database.users_chats_db import db
 from info import *
 from utils import temp
-from typing import AsyncGenerator
+from typing import Union, Optional, AsyncGenerator
+from pyrogram import types
+from Script import script 
+from datetime import date, datetime 
+import pytz
 from aiohttp import web
 from plugins import web_server, check_expired_premium
+
+import asyncio
+from pyrogram import idle
 from Deendayal_botz import DeendayalBot
 from util.keepalive import ping_server
 from Deendayal_botz.clients import initialize_clients
-import pytz
-from datetime import date, datetime
-
-# ✅ Logging setup
-logging.config.fileConfig('logging.conf')
-logging.getLogger().setLevel(logging.INFO)
-logging.getLogger("pyrogram").setLevel(logging.ERROR)
-logging.getLogger("aiohttp").setLevel(logging.ERROR)
-
-# ✅ Bot Start Time
 botStartTime = time.time()
 
-# ✅ Plugin Path
 ppath = "plugins/*.py"
 files = glob.glob(ppath)
+DeendayalBot.start()
+loop = asyncio.get_event_loop()
 
 async def Deendayal_start():
-    print('\nInitializing Deendayal Dhakad Bot...')
-    
-    # ✅ Fix: Properly start the bot
-    await DeendayalBot.start()
-
+    print('\n')
+    print('Initalizing Deendayal Dhakad Bot')
     bot_info = await DeendayalBot.get_me()
     DeendayalBot.username = bot_info.username
     await initialize_clients()
-
-    # ✅ Plugin Loader
     for name in files:
-        plugin_name = Path(name).stem
-        import_path = f"plugins.{plugin_name}"
-        
-        try:
-            spec = importlib.util.spec_from_file_location(import_path, name)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            sys.modules[import_path] = module
-            print(f"Deendayal Dhakad Imported => {plugin_name}")
-        except Exception as e:
-            print(f"❌ Error loading {plugin_name}: {e}")
-
+        with open(name) as a:
+            patt = Path(a.name)
+            plugin_name = patt.stem.replace(".py", "")
+            plugins_dir = Path(f"plugins/{plugin_name}.py")
+            import_path = "plugins.{}".format(plugin_name)
+            spec = importlib.util.spec_from_file_location(import_path, plugins_dir)
+            load = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(load)
+            sys.modules["plugins." + plugin_name] = load
+            print("Deendayal dhakad Imported => " + plugin_name)
     if ON_HEROKU:
         asyncio.create_task(ping_server())
-
-    # ✅ Fetch Banned Users & Chats
-    temp.BANNED_USERS, temp.BANNED_CHATS = await db.get_banned()
-
-    # ✅ Indexes Setup
+    b_users, b_chats = await db.get_banned()
+    temp.BANNED_USERS = b_users
+    temp.BANNED_CHATS = b_chats
     await Media.ensure_indexes()
     await Media2.ensure_indexes()
-
-    # ✅ Check Database Space
     stats = await clientDB.command('dbStats')
-    free_dbSize = round(512 - ((stats['dataSize']/(1024*1024)) + (stats['indexSize']/(1024*1024))), 2)
-
-    if DATABASE_URI2 and free_dbSize < 62:
+    free_dbSize = round(512-((stats['dataSize']/(1024*1024))+(stats['indexSize']/(1024*1024))), 2)
+    if DATABASE_URI2 and free_dbSize<62: #if the primary db have less than 62MB left, use second DB.
         tempDict["indexDB"] = DATABASE_URI2
-        logging.info(f"Using Secondary DB (Primary DB has {free_dbSize} MB left).")
+        logging.info(f"Since Primary DB have only {free_dbSize} MB left, Secondary DB will be used to store datas.")
     elif DATABASE_URI2 is None:
-        logging.error("❌ Missing SECONDDB_URI! Exiting...")
+        logging.error("Missing second DB URI !\n\nAdd SECONDDB_URI now !\n\nExiting...")
         exit()
     else:
-        logging.info(f"Primary DB has enough space ({free_dbSize} MB), using it.")
-
-    await choose_mediaDB()  
-
-    # ✅ Fetch Bot Info
+        logging.info(f"Since primary DB have enough space ({free_dbSize}MB) left, It will be used for storing datas.")
+    await choose_mediaDB()   
     me = await DeendayalBot.get_me()
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
     temp.B_LINK = me.mention
     DeendayalBot.username = '@' + me.username
-
-    # ✅ Start Premium Checker
     DeendayalBot.loop.create_task(check_expired_premium(DeendayalBot))
-
-    logging.info(f"{me.first_name} (Pyrogram v{__version__} | Layer {layer}) started on {me.username}.")
-    
-    # ✅ Send Restart Message
+    logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+    logging.info(LOG_STR)
+    logging.info(script.LOGO)
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
     now = datetime.now(tz)
-    time_str = now.strftime("%H:%M:%S %p")
-
-    await DeendayalBot.send_message(chat_id=LOG_CHANNEL, text=f"🤖 **Bot Restarted!**\n🔹 Name: {temp.B_NAME}\n📅 Date: {today}\n🕒 Time: {time_str}")
-
-    # ✅ Web Server Setup
+    time = now.strftime("%H:%M:%S %p")
+    await DeendayalBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(temp.B_LINK, today, time))
     app = web.AppRunner(await web_server())
     await app.setup()
-    await web.TCPSite(app, "0.0.0.0", PORT).start()
-
-    # ✅ Keep Bot Running
+    bind_address = "0.0.0.0"
+    await web.TCPSite(app, bind_address, PORT).start()
     await idle()
-
-    # ✅ Stop Bot Gracefully
-    await DeendayalBot.stop()
-    logging.info("Bot Stopped.")
-
+    
 if __name__ == '__main__':
     try:
-        asyncio.run(Deendayal_start())  # ✅ Fix: Correct event loop handling
+        loop.run_until_complete(Deendayal_start())
     except KeyboardInterrupt:
-        logging.info("Service Stopped. Bye 👋")
+        logging.info('Service Stopped Bye 👋')  
